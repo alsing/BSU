@@ -3,9 +3,11 @@
 
 #endif //LAB1_EMPLOYEE_H
 
+#include <iostream>
+#include <cstdlib>
+#include <fstream>
 
-struct employee
-{
+struct employee {
     int num;
     char name[10];
     double hours;
