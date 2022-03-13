@@ -1,8 +1,5 @@
 #include "Employee.h"
 
-using namespace std;
-
-
 int main(int argc, char* argv[]) {
     ifstream in(argv[0], ios::binary);
     ofstream out(argv[1]);

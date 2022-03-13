@@ -1,8 +1,5 @@
 #include "Employee.h"
 
-using namespace std;
-
-
 int main(int argc, char* argv[]) {
     ofstream out(argv[0], ios::binary);
     int num = atoi(argv[1]);

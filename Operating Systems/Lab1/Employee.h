@@ -7,6 +7,8 @@
 #include <cstdlib>
 #include <fstream>
 
+using namespace std;
+
 struct employee {
     int num;
     char name[10];
