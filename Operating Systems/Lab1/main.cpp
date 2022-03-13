@@ -11,16 +11,16 @@ string to_string(T value) {
 }
 
 int main() {
-    string fname;
+    string finname;
     int num;
 
     cout << "Enter binary file name: ";
-    cin >> fname;
+    cin >> finname;
     cout << "Enter number of records in this file: ";
     cin >> num;
 
     string creator = "Creator.cpp";
-    string commandLineForCreator = fname + " " + to_string(num);
+    string commandLineForCreator = finname + " " + to_string(num);
     STARTUPINFO si;
     ZeroMemory(&si,sizeof(STARTUPINFO));
     si.cb=sizeof(STARTUPINFO);
@@ -31,9 +31,30 @@ int main() {
     CloseHandle(pi.hProcess);
 
     employee e;
-    ifstream in(fname.c_str(), ios::binary);
+    ifstream in(finname.c_str(), ios::binary);
     while (in.read((char*)&e, sizeof(employee))) {
-        cout << e.num << " " << e.name << " " << e.hours << " " << e.hours * wage << '\n';
+        cout << e.num << " " << e.name << " " << e.hours << " " << e.hours << '\n';
     }
+
+    string foutname;
+    double wage;
+    cout << "Enter report file name: ";
+    cin >> foutname;
+    cout << "Enter wage: ";
+    cin >> wage;
+
+    string reporter = "Reporter.cpp";
+    string commandLineForReporter = finname + " " + foutname + " " + to_string(wage);
+    CreateProcess(reporter.c_str(), const_cast<char *>(commandLineForReporter.c_str()), NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
+    WaitForSingleObject(pi.hProcess, INFINITE);
+    CloseHandle(pi.hThread);
+    CloseHandle(pi.hProcess);
+
+    string s;
+    ifstream inReport(foutname.c_str());
+    while (getline(inReport, s))
+        cout << s << '\n';
+
+    system("pause");
     return 0;
 }
