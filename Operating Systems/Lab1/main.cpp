@@ -19,7 +19,7 @@ int main() {
     cout << "Enter number of records in this file: ";
     cin >> num;
 
-    string creator = "Creator.cpp";
+    string creator = "creator.exe";
     string commandLineForCreator = finname + " " + to_string(num);
     STARTUPINFO si;
     ZeroMemory(&si,sizeof(STARTUPINFO));
@@ -43,7 +43,7 @@ int main() {
     cout << "Enter wage: ";
     cin >> wage;
 
-    string reporter = "Reporter.cpp";
+    string reporter = "reporter.exe";
     string commandLineForReporter = finname + " " + foutname + " " + to_string(wage);
     CreateProcess(reporter.c_str(), const_cast<char *>(commandLineForReporter.c_str()), NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
     WaitForSingleObject(pi.hProcess, INFINITE);
