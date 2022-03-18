@@ -32,6 +32,22 @@ DWORD WINAPI min_max(LPVOID lpParam) {
     return 0;
 }
 
+DWORD WINAPI average(LPVOID lpParam) {
+    arrStruct* arrSt = (arrStruct*)lpParam;
+
+    arrSt->average = arrSt->array[0];
+    for (int i = 1; i < arrSt->size; i++) {
+        arrSt->average += arrSt->array[i];
+        Sleep(12);
+    }
+
+    arrSt->average /= arrSt->size;
+
+    cout << "Average: " << arrSt->average << '\n';
+
+    return 0;
+}
+
 int main() {
 
     return 0;
