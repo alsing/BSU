@@ -3,6 +3,13 @@
 
 using namespace std;
 
+
+DWORD WINAPI thread_actions(LPVOID lpParam) {
+    srand(*(DWORD*)lpParam);
+
+    return 0;
+}
+
 int main() {
     int n;
     cin >> n;
@@ -13,6 +20,10 @@ int main() {
 
     int n_marker;
     cin >> n_marker;
+
+    for (int i = 0; i < n_marker; i++) {
+
+    }
 
     return 0;
 }
