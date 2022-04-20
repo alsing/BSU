@@ -1,16 +1,15 @@
-from queue import PriorityQueue
+import heapq
 
 with open("huffman.in", "r") as f:
     n = int(f.readline())
-    q = PriorityQueue(n)
-    for i in f.readline().split():
-        q.put(int(i))
+    q = list(map(int, f.readline().split()))
+    heapq.heapify(q)
 
 s = 0
-while q.qsize() > 1:
-    el = q.get()
-    el += q.get()
-    q.put(el)
+while len(q) > 1:
+    el = heapq.heappop(q)
+    el += heapq.heappop(q)
+    heapq.heappush(q, el)
     s += el
 
 with open("huffman.out", "w") as fw:
