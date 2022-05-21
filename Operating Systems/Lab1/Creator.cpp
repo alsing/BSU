@@ -1,13 +1,13 @@
 #include "Employee.h"
 
 int main(int argc, char* argv[]) {
-    ofstream out(argv[0], ios::binary);
+    std::ofstream out(argv[0], std::ios::binary);
     int num = atoi(argv[1]);
     for (int i = 0; i < num; i++) {
         employee e;
-        cin >> e.num;
-        cin >> e.name;
-        cin >> e.hours;
+        std::cin >> e.num;
+        std::cin >> e.name;
+        std::cin >> e.hours;
         out.write((char*)&e, sizeof(employee));
     }
     out.close();

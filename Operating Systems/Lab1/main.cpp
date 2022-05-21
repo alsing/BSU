@@ -4,56 +4,56 @@
 #include <sstream>
 
 template <typename T>
-string to_string(T value) {
-    ostringstream os ;
+std::string to_string(T value) {
+    std::ostringstream os ;
     os << value ;
     return os.str() ;
 }
 
 int main() {
-    string finname;
-    int num;
+    std::string input_filename;
+    int num_records;
 
-    cout << "Enter binary file name: ";
-    cin >> finname;
-    cout << "Enter number of records in this file: ";
-    cin >> num;
+    std::cout << "Enter binary file name: ";
+    std::cin >> input_filename;
+    std::cout << "Enter number of records in this file: ";
+    std::cin >> num_records;
 
-    string creator = "creator.exe";
-    string commandLineForCreator = finname + " " + to_string(num);
+    std::string creator = "creator.exe";
+    std::string command_line_creator = input_filename + " " + to_string(num_records);
     STARTUPINFO si;
     ZeroMemory(&si,sizeof(STARTUPINFO));
     si.cb=sizeof(STARTUPINFO);
     PROCESS_INFORMATION pi;
-    CreateProcess(creator.c_str(), const_cast<char *>(commandLineForCreator.c_str()), NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
+    CreateProcess(creator.c_str(), const_cast<char *>(command_line_creator.c_str()), NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
     WaitForSingleObject(pi.hProcess, INFINITE);
     CloseHandle(pi.hThread);
     CloseHandle(pi.hProcess);
 
     employee e;
-    ifstream in(finname.c_str(), ios::binary);
+    std::ifstream in(input_filename.c_str(), std::ios::binary);
     while (in.read((char*)&e, sizeof(employee))) {
-        cout << e.num << " " << e.name << " " << e.hours << " " << e.hours << '\n';
+        std::cout << e.num << " " << e.name << " " << e.hours << " " << e.hours << '\n';
     }
 
-    string foutname;
+    std::string output_filename;
     double wage;
-    cout << "Enter report file name: ";
-    cin >> foutname;
-    cout << "Enter wage: ";
-    cin >> wage;
+    std::cout << "Enter report file name: ";
+    std::cin >> output_filename;
+    std::cout << "Enter wage: ";
+    std::cin >> wage;
 
-    string reporter = "reporter.exe";
-    string commandLineForReporter = finname + " " + foutname + " " + to_string(wage);
-    CreateProcess(reporter.c_str(), const_cast<char *>(commandLineForReporter.c_str()), NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
+    std::string reporter = "reporter.exe";
+    std::string command_line_reporter = input_filename + " " + output_filename + " " + to_string(wage);
+    CreateProcess(reporter.c_str(), const_cast<char *>(command_line_reporter.c_str()), NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
     WaitForSingleObject(pi.hProcess, INFINITE);
     CloseHandle(pi.hThread);
     CloseHandle(pi.hProcess);
 
-    string s;
-    ifstream inReport(foutname.c_str());
-    while (getline(inReport, s))
-        cout << s << '\n';
+    std::string s;
+    std::ifstream input_report(output_filename.c_str());
+    while (getline(input_report, s))
+        std::cout << s << '\n';
 
     system("pause");
     return 0;

@@ -1,8 +1,8 @@
 #include "Employee.h"
 
 int main(int argc, char* argv[]) {
-    ifstream in(argv[0], ios::binary);
-    ofstream out(argv[1]);
+    std::ifstream in(argv[0], std::ios::binary);
+    std::ofstream out(argv[1]);
     double wage = atof(argv[2]);
     employee e;
 
