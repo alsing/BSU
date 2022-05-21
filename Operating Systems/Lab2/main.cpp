@@ -1,78 +1,70 @@
 #include <iostream>
 #include <Windows.h>
+#include "array_struct.h"
 
-using namespace std;
 
-struct arrStruct {
-    arrStruct(int size, int *array) : size(size), array(array) {}
+DWORD WINAPI MinMax(LPVOID lpParam) {
+    const int sleepTime = 7;
+    arrayStruct* array_struct = (arrayStruct*)lpParam;
 
-    int size;
-    int* array;
-    int min;
-    int max;
-    int average;
-};
-
-DWORD WINAPI min_max(LPVOID lpParam) {
-    arrStruct* arrSt = (arrStruct*)lpParam;
-
-    arrSt->min = arrSt->max = arrSt->array[0];
-    for (int i = 0; i < arrSt->size; i++) {
-        if (arrSt->array[i] < arrSt->array[arrSt->min])
-            arrSt->min = i;
-        Sleep(7);
-        if (arrSt->array[i] > arrSt->array[arrSt->max])
-            arrSt->max = i;
-        Sleep(7);
+    array_struct->min = array_struct->max = array_struct->array[0];
+    for (int i = 0; i < array_struct->size; i++) {
+        if (array_struct->array[i] < array_struct->array[array_struct->min])
+            array_struct->min = i;
+        Sleep(sleepTime);
+        if (array_struct->array[i] > array_struct->array[array_struct->max])
+            array_struct->max = i;
+        Sleep(sleepTime);
     }
 
-    cout << "Min element: " << arrSt->array[arrSt->min] << '\n';
-    cout << "Max element: " << arrSt->array[arrSt->max] << '\n';
+    std::cout << "Min element: " << array_struct->array[array_struct->min] << '\n';
+    std::cout << "Max element: " << array_struct->array[array_struct->max] << '\n';
 
     return 0;
 }
 
-DWORD WINAPI average(LPVOID lpParam) {
-    arrStruct* arrSt = (arrStruct*)lpParam;
+DWORD WINAPI Average(LPVOID lpParam) {
+    const int sleepTime = 12;
+    arrayStruct* array_struct = (arrayStruct*)lpParam;
 
-    arrSt->average = arrSt->array[0];
-    for (int i = 1; i < arrSt->size; i++) {
-        arrSt->average += arrSt->array[i];
-        Sleep(12);
+    array_struct->average = array_struct->array[0];
+    for (int i = 1; i < array_struct->size; i++) {
+        array_struct->average += array_struct->array[i];
+        Sleep(sleepTime);
     }
 
-    arrSt->average /= arrSt->size;
+    array_struct->average /= array_struct->size;
 
-    cout << "Average: " << arrSt->average << '\n';
+    std::cout << "Average: " << array_struct->average << '\n';
 
     return 0;
 }
 
 int main() {
     int size;
-    cin >> size;
+    std::cin >> size;
 
     int* arr = new int[size];
     for (int i = 0; i < size; i++) {
-        cin >> arr[i];
+        std::cin >> arr[i];
     }
 
-    arrStruct* arrSt = new arrStruct(size, arr);
+    arrayStruct* array_struct = new arrayStruct(size, arr);
 
-    HANDLE minMaxThread = CreateThread(NULL,0,min_max,LPVOID(arrSt), 0, NULL);
-    HANDLE averageThread = CreateThread(NULL,0,average,LPVOID(arrSt), 0, NULL);
+    HANDLE min_max_thread = CreateThread(NULL, 0, MinMax, LPVOID(array_struct), 0, NULL);
+    HANDLE average_thread = CreateThread(NULL, 0, Average, LPVOID(array_struct), 0, NULL);
 
-    WaitForSingleObject(minMaxThread, INFINITE);
-    WaitForSingleObject(averageThread, INFINITE);
-    CloseHandle(minMaxThread);
-    CloseHandle(averageThread);
+    WaitForSingleObject(min_max_thread, INFINITE);
+    WaitForSingleObject(average_thread, INFINITE);
+    CloseHandle(min_max_thread);
+    CloseHandle(average_thread);
 
-    arr[arrSt->min] = arrSt->average;
-    arr[arrSt->max] = arrSt->average;
+    arr[array_struct->min] = array_struct->average;
+    arr[array_struct->max] = array_struct->average;
 
-    cout << "Result array: ";
+    std::cout << "Result array: ";
     for (int i = 0; i < size; i++) {
-        cout << arr[i] << ' ';
+        std::cout << arr[i] << ' ';
     }
 
     return 0;
