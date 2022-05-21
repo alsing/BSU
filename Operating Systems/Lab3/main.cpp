@@ -1,5 +1,5 @@
 #include <iostream>
-#include <Windows.h>
+#include "Thread.h"
 
 using namespace std;
 
@@ -24,6 +24,8 @@ int main() {
     for (int i = 0; i < n_marker; i++) {
 
     }
+
+    delete array;
 
     return 0;
 }
