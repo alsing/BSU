@@ -4,11 +4,10 @@
 #include <Windows.h>
 
 struct thread {
-    int arr_size;
-    int* arr;
+    int array_size;
+    int* array;
     int index;
-    HANDLE start, stop;
-    HANDLE ct[2];
+    HANDLE start, stop, *other_actions;
 };
 
 #endif //LAB3_THREAD_H
