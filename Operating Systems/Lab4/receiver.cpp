@@ -23,12 +23,12 @@ int LaunchSenders(int n_senders, std::string filename) {
         event_name += to_string(i);
         readyEvents[i] = CreateEvent(NULL, TRUE, FALSE, event_name.c_str());
         if (readyEvents[i] == NULL) {
-            std::cout << "Creation of the event failed!\n";
+            std::cout << "Failed to create the event!\n";
             return GetLastError();
         }
 
-        std::string exe = "sender.exe";
-        exe += filename + " " + event_name;
+        std::string exe = "Sender.exe";
+        exe += " " + filename + " " + event_name;
 
         STARTUPINFO startup_information;
         PROCESS_INFORMATION process_information;
@@ -43,4 +43,34 @@ int LaunchSenders(int n_senders, std::string filename) {
         }
     }
     std::cout << "Receiver process created " << n_senders << " senders\n";
+}
+
+std::string ReadMessage(std::string filename) {
+    std::ifstream input_file(filename.c_str(), std::ios::binary | std::ios::in);
+    if(!input_file.is_open()){
+        return "Failed to open the file!\n";
+    }
+
+    long file_size;
+    input_file.seekg(0, std::ios::end);
+    file_size = input_file.tellg();
+    if(!file_size)
+        return "Message file is empty!";
+
+    char result[messageSize];
+    input_file.seekg(0, std::ios::end);
+    input_file.read(result, messageSize);
+
+    char* buffer = new char[file_size];
+    input_file.seekg(0, std::ios::end);
+    input_file.read(buffer, file_size);
+
+    std::ofstream output_file(filename.c_str(), std::ios::binary | std::ios::out);
+    output_file.write(buffer + messageSize, file_size - messageSize);
+
+    input_file.close();
+    output_file.close();
+    delete[] buffer;
+
+    return result;
 }
