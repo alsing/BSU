@@ -55,7 +55,7 @@ std::string ReadMessage(std::string filename) {
     input_file.seekg(0, std::ios::end);
     file_size = input_file.tellg();
     if(!file_size)
-        return "Message file is empty!";
+        return "Message file is empty!\n";
 
     char result[messageSize];
     input_file.seekg(0, std::ios::end);
@@ -73,4 +73,52 @@ std::string ReadMessage(std::string filename) {
     delete[] buffer;
 
     return result;
+}
+
+int main() {
+    std::string filename;
+    std::cout <<"Enter binary file name: ";
+    std::cin >> filename;
+    std::fstream input_file(filename.c_str(), std::ios::binary | std::ios::out);
+
+    int n_senders;
+    std::cout << "Enter number of sender processes: ";
+    std::cin >> n_senders;
+
+    InitializeCriticalSection(&cs);
+    HANDLE start_all = CreateEvent(NULL, TRUE, FALSE, "START_ALL");
+    HANDLE file_mutex = CreateMutex(NULL, FALSE, "FILE_ACCESS");
+
+    if(file_mutex == NULL) {
+        std::cout << "Failed to create Mutex!\n";
+        return GetLastError();
+    }
+
+    HANDLE sender_semaphore = CreateSemaphore(NULL, 0, n_senders, "MESSAGES_COUNT_SEM");
+    HANDLE read_event = CreateEvent(NULL, FALSE, FALSE, "MESSAGE_READ");
+    if (sender_semaphore == NULL || read_event == NULL)
+        return GetLastError();
+
+    LaunchSenders(n_senders, filename);
+    WaitForMultipleObjects(n_senders, readyEvents, TRUE, INFINITE);
+    std::cout << "All senders are ready. Starting...\n";
+    SetEvent(start_all);
+    char buffer[messageSize];
+    char message[messageSize];
+
+    while(true) {
+        std::cin >> buffer;
+        if(std::cin.eof())
+            break;
+        std::cout << "Waiting for a message...\n";
+        WaitForSingleObject(sender_semaphore, INFINITE);
+        WaitForSingleObject(file_mutex, INFINITE);
+        std::cout << ReadMessage(filename);
+        ReleaseMutex(file_mutex);
+        SetEvent(read_event);
+    }
+
+    input_file.close();
+    delete[] readyEvents;
+    DeleteCriticalSection(&cs);
 }
