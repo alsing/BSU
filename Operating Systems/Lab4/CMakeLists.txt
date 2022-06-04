@@ -3,4 +3,4 @@ project(Lab4)
 
 set(CMAKE_CXX_STANDARD 98)
 
-add_executable(Lab4 main.cpp)
+add_executable(Lab4 receiver.cpp)
