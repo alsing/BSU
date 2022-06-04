@@ -62,6 +62,7 @@ int main() {
     std::cout << "Enter number of marker threads: ";
     std::cin >> n_marker;
 
+    InitializeCriticalSection(&cs);
     HANDLE* threads = new HANDLE[array_length];
     thread* information = new thread[array_length];
     bool* terminated_threads = new bool[array_length];
