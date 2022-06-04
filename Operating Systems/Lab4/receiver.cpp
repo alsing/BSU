@@ -1,12 +1,8 @@
-#include <iostream>
-#include <fstream>
-#include <Windows.h>
-#include <string>
 #include <sstream>
+#include "message.h"
 
 CRITICAL_SECTION cs;
 HANDLE* readyEvents;
-const int messageSize = 20;
 
 template <typename T>
 std::string to_string(T value) {
@@ -43,36 +39,6 @@ int LaunchSenders(int n_senders, std::string filename) {
         }
     }
     std::cout << "Receiver process created " << n_senders << " senders\n";
-}
-
-std::string ReadMessage(std::string filename) {
-    std::ifstream input_file(filename.c_str(), std::ios::binary | std::ios::in);
-    if(!input_file.is_open()){
-        return "Failed to open the file!\n";
-    }
-
-    long file_size;
-    input_file.seekg(0, std::ios::end);
-    file_size = input_file.tellg();
-    if(!file_size)
-        return "Message file is empty!\n";
-
-    char result[messageSize];
-    input_file.seekg(0, std::ios::end);
-    input_file.read(result, messageSize);
-
-    char* buffer = new char[file_size];
-    input_file.seekg(0, std::ios::end);
-    input_file.read(buffer, file_size);
-
-    std::ofstream output_file(filename.c_str(), std::ios::binary | std::ios::out);
-    output_file.write(buffer + messageSize, file_size - messageSize);
-
-    input_file.close();
-    output_file.close();
-    delete[] buffer;
-
-    return result;
 }
 
 int main() {
