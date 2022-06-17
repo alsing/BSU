@@ -36,7 +36,7 @@ void messaging(HANDLE handlePipe) {
         isSent = WriteFile(handlePipe, command, commandLength,
                            &bytesWritten, NULL);
 
-        if(!isSent) {
+        if (!isSent) {
             errorMessage("Message cannot be sent...\n");
             return;
         }

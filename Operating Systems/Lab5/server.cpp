@@ -173,7 +173,7 @@ void openPipes(int clientCount) {
                                 PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT,
                                 PIPE_UNLIMITED_INSTANCES,0,
                                 0,INFINITE, NULL);
-        if(!ConnectNamedPipe(hPipe, NULL)){
+        if (!ConnectNamedPipe(hPipe, NULL)){
             std::cout << "No connected clients.\n";
             break;
         }
